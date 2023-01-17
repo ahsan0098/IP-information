@@ -27,6 +27,7 @@ include("fetch_ip.php");
         $(document).on("click", "#srch", function(e) {
             e.preventDefault();
             var ip = $("#ip").val();
+            var btn = this;
             ip = JSON.stringify({
                 'ip': ip
             });
@@ -36,10 +37,24 @@ include("fetch_ip.php");
                 type: "POST",
                 data: ip,
                 contentType: "application/json; charset=utf-8",
+                beforeSend: function() {
+                    $(btn).text('Locating...');
+                    $("#loading").html(`
+                        <div class="text-center">
+                            <div class="spinner-grow text-danger " role="status">
+                                <span class="sr-only"></span>
+                            </div>
+                        </div>
+                        `);
+                },
                 success: function(data) {
                     $("#myiframe").html(`<iframe src="https://maps.google.com/maps?q=${data.lat},${data.lon}&hl=es;z=14&amp;output=embed" width="100%" height="625" frameborder="0"></iframe>`)
                     // var data = JSON.parse(data)
-                    console.log(data);
+                    $(btn).text("Search");
+                    $("#loading").html('');
+                    $("#ip-form")[0].reset();
+                    $("#query").text(`your searched IP is " ${data.query} "`);
+                    $("#query").text(`your searched IP is " ${data.query} "`);
                     $("#country").text(data.country);
                     $("#countrycode").text(data.countryCode);
                     $("#continent").text(data.continent);
@@ -87,19 +102,20 @@ include("fetch_ip.php");
         </div>
     </header>
     <!-- Icons Grid-->
+    <div id="loading" class="my-2"></div>
     <div class="container my-5">
+
         <div class="row">
             <div class="col-lg-6">
 
 
                 <div class="card border-primary">
                     <h5 class="card-header bg-primary d-flex justify-content-between">
-                        <span class="text-light lead align-self-center">IP address: " <?= $ip->query ?></span>"</span>
+                        <span class="text-light lead align-self-center" id="query">IP address: " <?= $ip->query ?> "</span>
 
                     </h5>
 
                     <div class="card-body" id="fill">
-
                         <table class="table table-striped text-center">
                             <thead>
                                 <tr>
