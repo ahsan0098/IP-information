@@ -6,7 +6,6 @@ header(
 $data = json_decode(file_get_contents("php://input"), true);
 
 if (isset($data['ip'])) {
-    // Test
     // echo "fghfhf";
 
     $query = trim($data['ip']);
