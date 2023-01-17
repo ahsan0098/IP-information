@@ -26,53 +26,67 @@ include("fetch_ip.php");
     <script>
         $(document).on("click", "#srch", function(e) {
             e.preventDefault();
-            var ip = $("#ip").val();
-            var btn = this;
-            ip = JSON.stringify({
-                'ip': ip
-            });
-            $.ajax({
+            if ($("#ip").val() != '') {
 
-                url: "search.php",
-                type: "POST",
-                data: ip,
-                contentType: "application/json; charset=utf-8",
-                beforeSend: function() {
-                    $(btn).text('Locating...');
-                    $("#loading").html(`
+                var ip = $("#ip").val();
+                var btn = this;
+                ip = JSON.stringify({
+                    'ip': ip
+                });
+                $.ajax({
+
+                    url: "search.php",
+                    type: "POST",
+                    data: ip,
+                    contentType: "application/json; charset=utf-8",
+                    beforeSend: function() {
+                        $(btn).text('Locating...');
+                        $("#loading").html(`
                         <div class="text-center">
                             <div class="spinner-grow text-danger " role="status">
                                 <span class="sr-only"></span>
                             </div>
                         </div>
                         `);
-                },
-                success: function(data) {
-                    $("#myiframe").html(`<iframe src="https://maps.google.com/maps?q=${data.lat},${data.lon}&hl=es;z=14&amp;output=embed" width="100%" height="625" frameborder="0"></iframe>`)
-                    // var data = JSON.parse(data)
-                    $(btn).text("Search");
-                    $("#loading").html('');
-                    $("#ip-form")[0].reset();
-                    $("#query").text(`your searched IP is " ${data.query} "`);
-                    $("#query").text(`your searched IP is " ${data.query} "`);
-                    $("#country").text(data.country);
-                    $("#countrycode").text(data.countryCode);
-                    $("#continent").text(data.continent);
-                    $("#continentcode").text(data.continentCode);
-                    $("#region").text(data.region);
-                    $("#regionname").text(data.regioNname);
-                    $("#currency").text(data.currency);
-                    $("#isp").text(data.isp);
-                    $("#as").text(data.as);
-                    $("#city").text(data.city);
-                    $("#district").text(data.district);
-                    $("#lon").text(data.lon);
-                    $("#lat").text(data.lat);
-                    $("#timezone").text(data.timezone);
-                }
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        if (data.status == "fail") {
+                            $(btn).text("Search");
+                            $("#ip-form")[0].reset();
+                            $("#loading").html('');
+                            alert(data.message);
+                        } else {
+                            $("#myiframe").html(`<iframe src="https://maps.google.com/maps?q=${data.lat},${data.lon}&hl=es;z=14&amp;output=embed" width="100%" height="625" frameborder="0"></iframe>`)
+                            // var data = JSON.parse(data)
+                            $(btn).text("Search");
+                            $("#loading").html('');
+                            $("#ip-form")[0].reset();
+                            $("#query").text(`your searched IP is " ${data.query} "`);
+                            $("#query").text(`your searched IP is " ${data.query} "`);
+                            $("#country").text(data.country);
+                            $("#countrycode").text(data.countryCode);
+                            $("#continent").text(data.continent);
+                            $("#continentcode").text(data.continentCode);
+                            $("#region").text(data.region);
+                            $("#regionname").text(data.regioNname);
+                            $("#currency").text(data.currency);
+                            $("#isp").text(data.isp);
+                            $("#as").text(data.as);
+                            $("#city").text(data.city);
+                            $("#district").text(data.district);
+                            $("#lon").text(data.lon);
+                            $("#lat").text(data.lat);
+                            $("#timezone").text(data.timezone);
+                        }
+                    }
 
-            });
-        })
+                });
+
+            } else {
+                alert("Enter IP in the box to search");
+            }
+        });
     </script>
     <!-- Navigation-->
     <!-- Masthead-->
