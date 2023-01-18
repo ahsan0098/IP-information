@@ -57,12 +57,11 @@ include("fetch_ip.php");
                             $("#loading").html('');
                             alert(data.message);
                         } else {
-                            $("#myiframe").html(`<iframe src="https://maps.google.com/maps?q=${data.lat},${data.lon}&hl=es;z=14&amp;output=embed" width="100%" height="625" frameborder="0"></iframe>`)
+                            $("#myIframe").html(`<iframe src="https://maps.google.com/maps?q=${data.lat},${data.lon}&hl=es;z=14&amp;output=embed" width="100%" height="625" frameborder="0"></iframe>`)
                             // var data = JSON.parse(data)
                             $(btn).text("Search");
                             $("#loading").html('');
                             $("#ip-form")[0].reset();
-                            $("#query").text(`your searched IP is " ${data.query} "`);
                             $("#query").text(`your searched IP is " ${data.query} "`);
                             $("#country").text(data.country);
                             $("#countrycode").text(data.countryCode);
